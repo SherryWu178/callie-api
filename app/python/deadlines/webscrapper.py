@@ -6,6 +6,7 @@ import re
 from robobrowser import RoboBrowser
 import json
 import sys
+import os
 
 def mapper(f,lst):
     return list( map(lambda x:f(x),lst) )
@@ -13,6 +14,7 @@ def mapper(f,lst):
 def filterer(f,lst):
     return list( filter(lambda x:f(x),lst) )
     
+currentDirectory = os.getcwd() + '/app/python/deadlines'
 
 '========================================================================================================================================'
 url = 'https://coursemology.org/users/sign_in'
@@ -61,7 +63,7 @@ def scrape_cs1010s(url,email,password ):
     dic['data']=array
 
    #scrape exam details
-    with open('/Users/sherrywu1999/Desktop/untitled/callie/callie-api/python/deadlines/data.json', 'w') as json_file:
+    with open(currentDirectory + '/data.json', 'w') as json_file:
       json.dump(dic, json_file) 
 
 
@@ -104,7 +106,7 @@ def scrape_cs2040s(url,email,password ):
     dic['data']=array
 
    #scrape exam details
-    with open('/Users/sherrywu1999/Desktop/untitled/callie/callie-api/python/deadlines/data.json', 'w') as json_file:
+    with open(currentDirectory + '/data.json', 'w') as json_file:
       json.dump(dic, json_file)
 
 

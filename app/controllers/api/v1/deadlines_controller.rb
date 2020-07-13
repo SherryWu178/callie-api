@@ -30,11 +30,12 @@ class Api::V1::DeadlinesController < ApplicationController
 
   def import
     require "json"
-    while File.exist?("../../../python/deadlines/data.json") == false
+    path = Rails.root.join('app','python','deadlines','data.json')
+    while File.exist?(path) == false
       sleep(1)
     end 
   
-    file = File.open("../../../python/deadlines/data.json")
+    file = File.open(path)
     data = JSON.parse(file.read)
     info = data["data"]
     info.each do |child|
@@ -53,7 +54,7 @@ class Api::V1::DeadlinesController < ApplicationController
   end
 
   def webscrap
-    fork { exec("python ../../../python/deadlines/pythonweb.py")
+    fork { exec("python #{Rails.root.join('app','python','deadlines','webscrapper.py')}")
     }
   end
 
