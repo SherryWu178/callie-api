@@ -1,5 +1,3 @@
-require "rubypython"
-
 class Api::V1::EventsController < ApplicationController
   def index
     events = Event.order("created_at DESC")
@@ -30,11 +28,12 @@ class Api::V1::EventsController < ApplicationController
 
   def import
     require "json"
-    while File.exist?("../../../python/timetables/caldr.json") == false
+    path = Rails.root.join('app','python','timetables','caldr.json')
+    while File.exist?(path) == false
       sleep(1)
     end 
   
-    file = File.open("../../../python/timetables/caldr.json")
+    file = File.open(path)
     data = JSON.parse(file.read)
     info = data["data"]
     info.each do |child|
@@ -65,7 +64,7 @@ class Api::V1::EventsController < ApplicationController
         puts duration
         retrieved.end_time = end_time
         retrieved.duration = duration
-        retrieved.completion = completion
+        retrieved.completion = false
         retrieved.save
       end
     end
@@ -81,6 +80,7 @@ class Api::V1::EventsController < ApplicationController
     fork { exec("python #{Rails.root.join('app','python','timetables','cal_rdr_no_input_duration.py')}") }
   end
 
+  private
   def event_param
     params.require(:event).permit(:title, :start_time, :end_time, 
     :activity_id, :duration, :completion)
