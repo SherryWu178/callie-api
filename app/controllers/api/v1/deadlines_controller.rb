@@ -30,11 +30,11 @@ class Api::V1::DeadlinesController < ApplicationController
 
   def import
     require "json"
-    while File.exist?("/Users/sherrywu1999/Desktop/untitled/callie/callie-api/python/deadlines/data.json") == false
+    while File.exist?("../../../python/deadlines/data.json") == false
       sleep(1)
     end 
   
-    file = File.open("/Users/sherrywu1999/Desktop/untitled/callie/callie-api/python/deadlines/data.json")
+    file = File.open("../../../python/deadlines/data.json")
     data = JSON.parse(file.read)
     info = data["data"]
     info.each do |child|
@@ -53,7 +53,7 @@ class Api::V1::DeadlinesController < ApplicationController
   end
 
   def webscrap
-    fork { exec("python /Users/sherrywu1999/Desktop/untitled/callie/callie-api/python/deadlines/pythonweb.py")
+    fork { exec("python ../../../python/deadlines/pythonweb.py")
     }
   end
 

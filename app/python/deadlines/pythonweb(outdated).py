@@ -233,7 +233,7 @@ def scrape_cosmo(url,email,password ):
 b = scrape_cosmo(url,email,password )
 
 #scrape exam details
-with open('/Users/sherrywu1999/Desktop/untitled/callie/callie-api/python/callie-api/deadlines/data.json', 'w') as json_file:
+with open('data.json', 'w') as json_file:
   json.dump(b, json_file)
 
 

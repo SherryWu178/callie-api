@@ -1,14 +1,14 @@
-from icalendar import Calendar
-from icalendar import Event
 from datetime import datetime
 from datetime import timedelta
+from icalendar import Calendar
+from icalendar import Event
 import sys
 import json
+import os
 
+currentDirectory = os.getcwd() + '/app/python/timetables'
 
-test = '/Users/sherrywu1999/Desktop/untitled/callie/callie-api/python/timetables/nusmods_calendar.ics'
-
-
+test = currentDirectory + '/nusmods_calendar.ics'
 
 def modify(x):
     #temp = datetime.strptime(str(x)[:-6], '%Y-%m-%d %H:%M:%S')
@@ -63,7 +63,5 @@ def cal_rdr(file):
     big_dic['data'] = flist
     return big_dic
 
-
-
-with open('/Users/sherrywu1999/Desktop/untitled/callie/callie-api/python/callie-api/timetables/caldr.json', 'w') as json_file:
+with open(currentDirectory + '/caldr.json', 'w') as json_file:
     json.dump(cal_rdr(test), json_file)
