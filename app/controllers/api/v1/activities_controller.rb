@@ -1,12 +1,14 @@
 class Api::V1::ActivitiesController < ApplicationController
+
   def index
     activities = Activity.order("created_at DESC")
     render json: activities
   end
 
   def create
-    activity = Activity.create(activity_param)
-    render json: activity
+    newActivity = Activity.create(activity_param)
+    @current_user.activities << newActivity
+    render json: newActivity
   end
 
   def show
@@ -24,6 +26,11 @@ class Api::V1::ActivitiesController < ApplicationController
     activity = Activity.find(params[:id])
     activity.destroy
     head :no_content, status: :ok
+  end
+
+  private
+  def activity_param
+    params.require(:activity).permit(:title, :target)
   end
 end
 

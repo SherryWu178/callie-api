@@ -8,7 +8,8 @@ import os
 
 currentDirectory = os.getcwd() + '/app/python/timetables'
 
-test = currentDirectory + '/nusmods_calendar.ics'
+s_arg = sys.argv
+test = currentDirectory + '/nusmods_calendar' + s_arg[1] + '.ics' 
 
 def modify(x):
     #temp = datetime.strptime(str(x)[:-6], '%Y-%m-%d %H:%M:%S')

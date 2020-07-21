@@ -1,14 +1,14 @@
-require 'concurrent'
-
 class Api::V1::DeadlinesController < ApplicationController
+
   def index
     deadlines = Deadline.order("created_at DESC")
     render json: deadlines
   end
 
   def create
-    deadline = Deadline.create(deadline_param)
-    render json: deadline
+    newDeadline = Deadline.create(deadline_param)
+    @current_user.deadlines << newDeadline
+    render json: newDeadline
   end
 
   def show
@@ -45,6 +45,7 @@ class Api::V1::DeadlinesController < ApplicationController
       retrieved = Deadline.find_by(title: title)
       if retrieved == nil
         deadline = Deadline.create({title: title, datetime: datetime, allDay: true, activity: activity})
+        @current_user.deadlines << deadline
       else
         retrieved.datetime = datetime
         retrieved.allDay = true
@@ -54,7 +55,11 @@ class Api::V1::DeadlinesController < ApplicationController
   end
 
   def webscrap
-    fork { exec("python #{Rails.root.join('app','python','deadlines','webscrapper.py')}")
+    url = params[:url]
+    email = params[:email]
+    password = params[:password]
+    mod = params[:mod]
+    fork { exec("python #{Rails.root.join('app','python','deadlines','webscrapper.py')} #{url} #{email} #{password} #{mod}")
     }
   end
 

@@ -8,6 +8,7 @@ class CreateEvents < ActiveRecord::Migration[6.0]
       t.boolean :completion
       t.float :duration
       t.references :activity, foreign_key: true, index: true
+      t.references :user, foreign_key: true, index: true
 
       t.timestamps
     end

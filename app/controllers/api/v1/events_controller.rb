@@ -1,12 +1,14 @@
 class Api::V1::EventsController < ApplicationController
+  require 'json' 
   def index
     events = Event.order("created_at DESC")
     render json: events
   end
 
   def create
-    event = Event.create(event_param)
-    render json: event
+    newEvent = Event.create(event_param)
+    @current_user.events << newEvent
+    render json: newEvent
   end
 
   def show
@@ -43,30 +45,32 @@ class Api::V1::EventsController < ApplicationController
       duration = child["duration"]
       completion = true
 
-      retrieved = Event.find_by(title: event_title, start_time: start_time)
+      # retrieved = Event.find_by(title: event_title, start_time: start_time, user_id: @current_user.id)
 
-      if retrieved == nil
-        activity_title = event_title.split(" ")[0]
-        activity = Activity.find_or_initialize_by(title: activity_title)
-        if activity.duration == nil
-          activity.duration = 0
-        else
-          activity.duration = activity.duration + duration
-        end
-        activity.save
-        puts duration
+      # if retrieved == nil
+      activity_title = event_title.split(" ")[0]
+      activity = Activity.find_or_create_by(title: activity_title, target: 10, user_id: @current_user)
+      @current_user.activities << activity
 
-        event = Event.create({title: event_title, start_time: start_time, end_time: end_time, 
-          activity: activity, duration: duration, completion: completion})
-        event.save
-      else 
-        puts "changing"
-        puts duration
-        retrieved.end_time = end_time
-        retrieved.duration = duration
-        retrieved.completion = false
-        retrieved.save
-      end
+      # if activity.duration == nil
+      #   activity.duration = 0
+      # else
+      #   activity.duration = activity.duration + duration
+      # end
+      # activity.save
+
+      newEvent = Event.create({title: event_title, start_time: start_time, end_time: end_time, 
+        activity: activity, duration: duration, completion: completion})
+      @current_user.events << newEvent
+      # else 
+      #   puts "changing"
+      #   @current_user.events << retrieved
+      #   @current_user.activities << retrieved.activity
+      #   retrieved.end_time = end_time
+      #   retrieved.duration = duration
+      #   retrieved.completion = false
+      #   retrieved.save
+      # end
     end
   end
 
@@ -77,8 +81,20 @@ class Api::V1::EventsController < ApplicationController
     # RubyPython.import("cal_rdr_no_input_duration") # (add) call on setup.py in the directory
     # RubyPython.stop # stop the Python interpreter
     # fork { exec("python /Users/sherrywu1999/Desktop/untitled/callie/callie-api/app/python/timetables/cal_rdr_no_input_duration.py") }
-    fork { exec("python #{Rails.root.join('app','python','timetables','cal_rdr_no_input_duration.py')}") }
+    id = params[:user_id]
+    puts "the id is #{id}" 
+    fork { exec("python #{Rails.root.join('app','python','timetables','cal_rdr_no_input_duration.py')} #{id}") }
   end
+
+  def write
+    content = params["file"].tempfile
+    data = File.read(content)
+    user_id = @current_user.id
+    file_name = 'nusmods_calendar' + user_id.to_s + '.ics'
+    target  = Rails.root.join('app','python','timetables', file_name)
+    File.open(target, "w+") do |f| f.write(data) end
+  end
+        
 
   private
   def event_param

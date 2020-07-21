@@ -18,18 +18,23 @@ ActiveRecord::Schema.define(version: 2020_06_18_084255) do
   create_table "activities", force: :cascade do |t|
     t.string "title"
     t.float "duration"
+    t.float "target"
+    t.bigint "user_id"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+    t.index ["user_id"], name: "index_activities_on_user_id"
   end
 
   create_table "deadlines", force: :cascade do |t|
     t.string "title"
     t.datetime "datetime"
     t.bigint "activity_id"
+    t.bigint "user_id"
     t.boolean "allDay"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.index ["activity_id"], name: "index_deadlines_on_activity_id"
+    t.index ["user_id"], name: "index_deadlines_on_user_id"
   end
 
   create_table "events", force: :cascade do |t|
@@ -40,11 +45,22 @@ ActiveRecord::Schema.define(version: 2020_06_18_084255) do
     t.boolean "completion"
     t.float "duration"
     t.bigint "activity_id"
+    t.bigint "user_id"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.index ["activity_id"], name: "index_events_on_activity_id"
+    t.index ["user_id"], name: "index_events_on_user_id"
   end
 
+  create_table "users", force: :cascade do |t|
+    t.string "username"
+    t.string "email"
+    t.string "password_digest"
+  end
+
+  add_foreign_key "activities", "users"
   add_foreign_key "deadlines", "activities"
+  add_foreign_key "deadlines", "users"
   add_foreign_key "events", "activities"
+  add_foreign_key "events", "users"
 end
