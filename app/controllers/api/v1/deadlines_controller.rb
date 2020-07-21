@@ -55,15 +55,12 @@ class Api::V1::DeadlinesController < ApplicationController
   end
 
   def webscrap
-    url = params[:url]
-    email = params[:email]
-    password = params[:password]
-    mod = params[:mod]
-    fork { exec("python #{Rails.root.join('app','python','deadlines','webscrapper.py')} #{url} #{email} #{password} #{mod}")
-    }
+      url = params[:url]
+      email = params[:email]
+      password = params[:password]
+      mod = params[:mod]
+      fork { exec("python #{Rails.root.join('app','python','deadlines','webscrapper.py')} #{url} #{email} #{password} #{mod}")
+      }
   end
-
-
-
 
 end

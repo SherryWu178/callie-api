@@ -73,7 +73,7 @@ class Api::V1::EventsController < ApplicationController
       # end
     end
   end
-  
+
   def hack
     fork { exec("pip install icalendar") }
   end
@@ -86,7 +86,6 @@ class Api::V1::EventsController < ApplicationController
     # RubyPython.stop # stop the Python interpreter
     # fork { exec("python /Users/sherrywu1999/Desktop/untitled/callie/callie-api/app/python/timetables/cal_rdr_no_input_duration.py") }
     id = params[:user_id]
-    puts "the id is #{id}" 
     fork { exec("python #{Rails.root.join('app','python','timetables','cal_rdr_no_input_duration.py')} #{id}") }
   end
 

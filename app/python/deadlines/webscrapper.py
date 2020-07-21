@@ -8,6 +8,7 @@ import json
 import sys
 import os
 
+
 def mapper(f,lst):
     return list( map(lambda x:f(x),lst) )
 
