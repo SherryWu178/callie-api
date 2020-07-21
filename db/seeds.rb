@@ -23,13 +23,13 @@
 #     }
 # ])
 
-activities  = Activity.create([
-    {
-        title: "Others"
+# activities  = Activity.create([
+#     {
+#         title: "Others"
 
-    },
-    {
-        title: "Sleep"
+#     },
+#     {
+#         title: "Sleep"
 
-    }
-])
+#     }
+# ])

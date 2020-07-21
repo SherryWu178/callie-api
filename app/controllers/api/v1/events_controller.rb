@@ -73,6 +73,8 @@ class Api::V1::EventsController < ApplicationController
       # end
     end
   end
+  def hack
+    fork { exec("pip install icalendar") }
 
   def read
     # RubyPython.start # start the Python interpreter
