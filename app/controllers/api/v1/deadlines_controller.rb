@@ -63,4 +63,9 @@ class Api::V1::DeadlinesController < ApplicationController
       }
   end
 
+
+  private
+  def deadline_param
+    params.require(:deadline).permit(:datetime)
+  end
 end
