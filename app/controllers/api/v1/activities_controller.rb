@@ -18,7 +18,7 @@ class Api::V1::ActivitiesController < ApplicationController
 
   def update
     activity = Activity.find(params[:id])
-    activity.update_attributes(activity)
+    activity.update_attributes(activity_param)
     render json: activity
   end
 
@@ -30,7 +30,7 @@ class Api::V1::ActivitiesController < ApplicationController
 
   private
   def activity_param
-    params.require(:activity).permit(:title, :target)
+    params.require(:activity).permit(:title, :target, :duration)
   end
 end
 
