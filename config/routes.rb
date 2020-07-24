@@ -9,7 +9,7 @@ Rails.application.routes.draw do
       get 'events/import', to: 'events#import'
       resources :events
       post 'deadlines/webscrap', to: 'deadlines#webscrap'
-      get 'deadlines/import', to: 'deadlines#import'
+      post 'deadlines/import', to: 'deadlines#import'
       resources :deadlines
       resources :users
     end

@@ -7,7 +7,7 @@ class Api::V1::UsersController < ApplicationController
   
   def create
       begin
-          @user = User.create(user_params)
+          @user = User.create!(user_params)
           jwt_token = AuthenticateUser.new(@user.email, @user.password).token
           render json: { user: @user, token: jwt_token }
       rescue ActiveRecord::RecordInvalid => invalid
@@ -23,7 +23,7 @@ class Api::V1::UsersController < ApplicationController
 
   def update
       begin
-          @current_user.update(user_params)
+          @current_user.update!(user_params)
       rescue ActiveRecord::RecordNotSaved => invalid
           render json: {
               message: "#{Message.update_failed} #{invalid.record.errors}"
@@ -33,7 +33,7 @@ class Api::V1::UsersController < ApplicationController
 
   def destroy
       begin
-          User.destroy(@current_user.id)
+          User.destroy!(@current_user.id)
           render json: { message:  Message.account_deleted }
       rescue ActiveRecord::RecordNotDestroyed => invalid
           render json: {
