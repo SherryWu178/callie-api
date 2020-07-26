@@ -35,11 +35,6 @@ class Api::V1::DeadlinesController < ApplicationController
     while File.exist?(path) == false
       sleep(1)
       count = count + 1
-      if count > 60
-        render json: {
-              message: "invalid credentials"
-          }, status: :unprocessable_entity
-      end
     end 
   
     file = File.open(path)
