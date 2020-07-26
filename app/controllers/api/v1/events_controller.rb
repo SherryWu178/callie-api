@@ -62,6 +62,7 @@ class Api::V1::EventsController < ApplicationController
       newEvent = Event.create({title: event_title, start_time: start_time, end_time: end_time, 
         activity: activity, duration: duration, completion: completion})
       @current_user.events << newEvent
+
       # else 
       #   puts "changing"
       #   @current_user.events << retrieved
@@ -72,11 +73,11 @@ class Api::V1::EventsController < ApplicationController
       #   retrieved.save
       # end
     end
+    puts
+    fork { exec("rm #{Rails.root.join('app','python','timetables','caldr.json')} ")}
+
   end
 
-  def hack
-    fork { exec("pip install icalendar") }
-  end
 
   def read
     # RubyPython.start # start the Python interpreter
