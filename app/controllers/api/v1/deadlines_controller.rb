@@ -49,7 +49,11 @@ class Api::V1::DeadlinesController < ApplicationController
     
     half = params["activity_title"]
     activity_title = "CS" + half
-    activity = Activity.find_or_create_by(title: activity_title, target:10, user_id: @current_user.id)
+    activity = Activity.find_by(title: activity_title, user_id: @current_user.id)
+    if activity === nil
+      activity = Activity.create(title: activity_title, target: 10, user_id: @current_user.id)
+    end
+
     @current_user.activities << activity
 
     info.each do |child|
